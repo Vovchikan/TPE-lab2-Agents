@@ -1,0 +1,12 @@
+StoreAgent
+Location:33|22, Name:Mango,     DeliveryHours:11|20-12|30
+Location:11|130,Name:Qucksilver,DeliveryHours:11-14
+Location:44|26, Name:Zara,      DeliveryHours:13-14|30
+DeliveryAgent
+Type:Big
+Type:Small
+Type:Middle
+CargoAgent
+DestinationAddress:Mango,      Weight:8
+DestinationAddress:Quicksilver,Weight:45
+DestionationAddress:Zara,      Weight:23
