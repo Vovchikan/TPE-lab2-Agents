@@ -1,13 +1,24 @@
 package supply;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
+import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 
+@SuppressWarnings("serial")
 public class DeliveryAgent extends Agent{
-	public static void main(String[] args) {
-		
-	}
+	private IVehicle vehicle;
+	private List<CargoAgent> cargosList;
+	
 	protected void setup() {
+		cargosList = new ArrayList<CargoAgent>();
+		vehicle = new Vehicle();
+		
+		FillWithArgs(getArguments());
+		
 		addBehaviour(new B1(this));
 	}
 	
@@ -25,4 +36,20 @@ public class DeliveryAgent extends Agent{
         public  boolean done() {  return finished; }
 	}
 	
+	private void FillWithArgs(Object[] args) {
+		vehicle.SetType(args[0]);
+	}
+	
+	private void AddCargo(CargoAgent cargo) throws NotImplementedException {
+		List<CargoAgent> tempList = new ArrayList<CargoAgent>();
+		Collections.copy(tempList, cargosList);
+		int totalWeight = 0;
+		for (CargoAgent cargoAgent : cargosList) {
+			totalWeight += cargoAgent.GetWeight();
+		}
+		if(vehicle.GetWeight() >= totalWeight+cargo.GetWeight())
+			cargosList.add(cargo);
+		else
+			throw new NotImplementedException("Нет места.");
+	}
 }

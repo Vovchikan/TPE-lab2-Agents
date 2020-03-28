@@ -1,13 +1,18 @@
 package supply;
 
+
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 
+@SuppressWarnings("serial")
 public class StoreAgent extends Agent {
-	public static void main(String[] args) {
-		
-	}
+	private ILocation location;
+	private IDeliveryHours deliveryHours;
+	
 	protected void setup() {
+		location = new LocationInt();
+		deliveryHours = new DeliveryHours();
+		FillWithArgs(getArguments());
 		addBehaviour(new B1(this));
 	}
 
@@ -26,5 +31,10 @@ public class StoreAgent extends Agent {
 		public boolean done() {
 			return finished;
 		}
+	}
+	
+	private void FillWithArgs(Object[] args) {
+		location.SetLocation(args[0]);
+		deliveryHours.SetHours(args[1]);
 	}
 }
