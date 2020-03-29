@@ -9,7 +9,19 @@ import jade.core.behaviours.SimpleBehaviour;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 
 @SuppressWarnings("serial")
-public class DeliveryAgent extends Agent{
+public class DeliveryAgent extends MyAgent{
+	private static int count = 1;
+	
+	@Override
+	protected String[] GetParamsNames() {
+		return new String[] {"Type"};
+	}
+	
+	@Override
+	protected int GetNumber() {
+		return count++;
+	}
+	
 	private IVehicle vehicle;
 	private List<CargoAgent> cargosList;
 	

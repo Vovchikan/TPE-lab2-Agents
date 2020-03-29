@@ -5,9 +5,22 @@ import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 
 @SuppressWarnings("serial")
-public class StoreAgent extends Agent {
+public class StoreAgent extends MyAgent {
+	private static int count = 1;
+	
+	@Override
+	protected String[] GetParamsNames() {
+		return new String[] {"Location", "Name", "DeliveryHours"};
+	}
+	
+	@Override
+	protected int GetNumber() {
+		return count++;
+	}
+	
 	private ILocation location;
 	private IDeliveryHours deliveryHours;
+	private String StoreName;
 	
 	protected void setup() {
 		location = new LocationInt();
@@ -35,6 +48,7 @@ public class StoreAgent extends Agent {
 	
 	private void FillWithArgs(Object[] args) {
 		location.SetLocation(args[0]);
-		deliveryHours.SetHours(args[1]);
+		StoreName = (String)args[1];
+		deliveryHours.SetHours(args[2]);
 	}
 }

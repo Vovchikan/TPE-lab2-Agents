@@ -9,4 +9,4 @@ Type:Middle
 CargoAgent
 DestinationAddress:Mango,      Weight:8
 DestinationAddress:Quicksilver,Weight:45
-DestionationAddress:Zara,      Weight:23
+DestinationAddress:Zara,      Weight:23

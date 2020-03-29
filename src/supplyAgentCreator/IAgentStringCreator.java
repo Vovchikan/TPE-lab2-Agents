@@ -1,5 +1,5 @@
 package supplyAgentCreator;
 
 public interface IAgentStringCreator {
-	public String CreatStringAgent(String parametr);
+	public String CreatStringAgent(String line);
 }
