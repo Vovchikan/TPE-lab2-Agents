@@ -1,14 +1,10 @@
 package supply;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import jade.core.Agent;
-import jade.core.behaviours.SimpleBehaviour;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 
-@SuppressWarnings("serial")
 public class DeliveryAgent extends MyAgent{
 	private static int count = 1;
 	
@@ -25,43 +21,25 @@ public class DeliveryAgent extends MyAgent{
 	private IVehicle vehicle;
 	private List<CargoAgent> cargosList;
 	
-	protected void setup() {
+	@Override
+	protected void FillWithArgs(Object[] args) {
 		cargosList = new ArrayList<CargoAgent>();
 		vehicle = new Vehicle();
-		
-		FillWithArgs(getArguments());
-		
-		addBehaviour(new B1(this));
-	}
-	
-	class B1 extends SimpleBehaviour{
-		public B1(Agent a)
-		{
-			super(a);
-		}
-		public void action() {
-			String format = "My name is %s";
-			System.out.println(String.format(format, myAgent.getLocalName() ) );
-		}
-		
-		private boolean finished = false;
-        public  boolean done() {  return finished; }
-	}
-	
-	private void FillWithArgs(Object[] args) {
 		vehicle.SetType(args[0]);
 	}
 	
 	private void AddCargo(CargoAgent cargo) throws NotImplementedException {
-		List<CargoAgent> tempList = new ArrayList<CargoAgent>();
-		Collections.copy(tempList, cargosList);
-		int totalWeight = 0;
-		for (CargoAgent cargoAgent : cargosList) {
-			totalWeight += cargoAgent.GetWeight();
-		}
-		if(vehicle.GetWeight() >= totalWeight+cargo.GetWeight())
+		if(CheckSpaceForCargo(cargo))
 			cargosList.add(cargo);
 		else
-			throw new NotImplementedException("Нет места.");
+			throw new NotImplementedException("Добавить действия при нехватки места.");
+	}
+	
+	private boolean CheckSpaceForCargo(CargoAgent cargo) {
+		var totalWeight = cargo.GetWeight();
+		for(CargoAgent c: cargosList) {
+			totalWeight += c.GetWeight();
+		}
+		return totalWeight <= vehicle.GetWeight();
 	}
 }

@@ -6,6 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="S:/Java/eclipse/workspace/AgentPotrebitel/lib/jade.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Programming/Java/Eclipse-workspace/TPE-lab2-Agents/lib/jade.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

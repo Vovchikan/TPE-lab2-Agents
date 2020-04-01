@@ -6,16 +6,18 @@ import java.util.List;
 
 import jade.core.Agent;
 
-public class MyAgent extends Agent {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public abstract class MyAgent extends Agent {
 	
-	protected int GetNumber() {return 0;}
+	protected abstract int GetNumber();
 	
-	protected String[] GetParamsNames(){return null;}
+	protected abstract String[] GetParamsNames();
+	
+	protected abstract void FillWithArgs(Object[] args);
+	
+	@Override
+	protected void setup() {
+		FillWithArgs(getArguments());
+	}
 	
 	public String CreateStringAgent(String line) {
 		String FullClassName = this.getClass().getName();
