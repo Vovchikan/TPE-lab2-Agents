@@ -1,6 +1,7 @@
 package supply.cargo;
 
-import supply.MyAgent;
+import supply.agent.IAgentInfo;
+import supply.agent.MyAgent;
 
 public class CargoAgent extends MyAgent{
 	private static int count = 1;
@@ -29,15 +30,20 @@ public class CargoAgent extends MyAgent{
 	public double GetWeight() {
 		return weight;
 	}
-
+	
+	public String GetDestinationAddress() {
+		return destinationAddress;
+	}
+	
 	@Override
 	protected void FillWithArgs(Object[] args) {
 		destinationAddress = (String)args[0];
 		weight = Double.parseDouble(args[1].toString());
 	}
-	
-	public String SendInfo() {
-		String format = "weight:%f,destination:%s";
-		return String.format(format, weight, destinationAddress);
+
+	@Override
+	public IAgentInfo GetInfo() {
+		// TODO Auto-generated method stub
+		return new CargoInfo(this);
 	}
 }

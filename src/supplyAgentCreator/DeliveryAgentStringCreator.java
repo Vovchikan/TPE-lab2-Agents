@@ -1,6 +1,6 @@
 package supplyAgentCreator;
 
-import supply.MyAgent;
+import supply.agent.MyAgent;
 import supply.delivery.DeliveryAgent;
 
 public class DeliveryAgentStringCreator implements IAgentStringCreator {

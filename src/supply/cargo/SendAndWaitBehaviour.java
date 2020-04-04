@@ -1,8 +1,9 @@
 package supply.cargo;
 
-import jade.core.AID;
 import jade.core.behaviours.*;
 import jade.lang.acl.*;
+import supply.agent.IAgentInfo;
+import supply.delivery.DeliveryInfoForCargo;
 
 public class SendAndWaitBehaviour extends SimpleBehaviour {
 
@@ -18,16 +19,25 @@ public class SendAndWaitBehaviour extends SimpleBehaviour {
 
 	@Override
 	public void action() {
+		DeliveryInfoForCargo info = null;
 		for (int i = 0; i < receiversNames.length; i++) {
-			System.out.println(myAgent.getLocalName() + " is active.");
-			SendMessage(receiversNames[i], myAgent.SendInfo());// send message
+			System.out.println(myAgent.getLocalName() + " is trying to find free deliverAgent.");
+			myAgent.SendInfo(receiversNames[i], myAgent.GetInfo());// send message
 			
 			MessageTemplate m = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-			finished = ReceiveMessage(m, 12000);
-			if(finished)
+			info = ReceiveMessage(m, 12000);
+			if(info == null)
+				System.out.println(myAgent.getLocalName()+": empty message was received.");
+			else if(info.isSuccess()){
+				System.out.println(myAgent.getLocalName()+": "+receiversNames[i]+ " will drive me.");
 				break;
+			}
+			else {
+				String reason = info.getReason();
+				System.out.println(myAgent.getLocalName()+": "+receiversNames[i]+ " WON'T DRIVE ME. REASON IS \""+reason+"\".");
+			}
 		}		
-		if(!finished)
+		if(info == null || !info.isSuccess())
 			System.out.println("Nikto menya ne vzyal");
 		finished = true;
 	}
@@ -37,32 +47,16 @@ public class SendAndWaitBehaviour extends SimpleBehaviour {
 		return finished;
 	}
 	
-	private void SendMessage(String receiverName, String message) {
-		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		msg.setContent(message);
-		
-		msg.addReceiver(new AID(receiverName, AID.ISLOCALNAME));
-		myAgent.send(msg);
-	}
-	
-	private boolean ReceiveMessage(MessageTemplate m, int delay) {
+	private DeliveryInfoForCargo ReceiveMessage(MessageTemplate m, int delay) {
 		ACLMessage msg = myAgent.blockingReceive(m, delay);
 		if(msg != null) {
 			System.out.println(myAgent.getLocalName() + ": message from " + msg.getSender().getLocalName() + " was received.");
-			if("Accepted".equals(msg.getContent())) {
-				System.out.println(myAgent.getLocalName() + ": " + msg.getSender().getLocalName() + " said that he will take me!");
-				return true;
-			}
-			else {
-				System.out.println(myAgent.getLocalName() + ": order from " + msg.getSender().getLocalName() + " was rejected - " + msg.getContent());
-				return false;
-			}
+			IAgentInfo info = new DeliveryInfoForCargo();
+			info = myAgent.ProcessingMessageContent(msg.getContent(), info);
+			return (DeliveryInfoForCargo) info;
 			
 		}
-		else {
-			System.out.println(myAgent.getLocalName() + ": empty message was received");
-			return false;
-		}
+		return null;
 	}
 
 }

@@ -3,7 +3,9 @@ package supply.delivery;
 import java.util.ArrayList;
 import java.util.List;
 
-import supply.MyAgent;
+import supply.agent.IAgentInfo;
+import supply.agent.MyAgent;
+import supply.cargo.CargoInfo;
 
 public class DeliveryAgent extends MyAgent{
 	private static int count = 1;
@@ -22,33 +24,39 @@ public class DeliveryAgent extends MyAgent{
 	protected void setup() {
 		// TODO Auto-generated method stub
 		super.setup();
-		addBehaviour(new WaitBehaviour(this));
+		addBehaviour(new WaitCargoBehaviour(this));
 	}
 	
 	private IVehicle vehicle;
-	private List<ICargoInfo> cargosInfo;
+	private List<CargoInfo> cargosInfo;
 	
 	@Override
 	protected void FillWithArgs(Object[] args) {
-		cargosInfo = new ArrayList<ICargoInfo>();
+		cargosInfo = new ArrayList<CargoInfo>();
 		vehicle = new Vehicle();
 		vehicle.SetType(args[0]);
 	}
 	
-	public void AddCargo(ICargoInfo cargoInfo) {
+	public void AddCargo(CargoInfo cargoInfo) {
 		cargosInfo.add(cargoInfo);
 		vehicle.PutCargo(cargoInfo.GetWeight());
 	}
 	
-	public boolean CheckSpaceForCargo(ICargoInfo cargoInfo) {
+	public boolean CheckSpaceForCargo(CargoInfo cargoInfo) {
 		return cargoInfo.GetWeight() <= vehicle.GetFreeWeight();
 	}
 
 	public void PrintAllCargos() {
 		// TODO Auto-generated method stub
-		for(ICargoInfo info : cargosInfo) {
+		for(CargoInfo info : cargosInfo) {
 			info.PrintInConsole();
 		}
 		System.out.println();
+	}
+
+	@Override
+	public IAgentInfo GetInfo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

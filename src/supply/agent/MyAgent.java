@@ -1,10 +1,12 @@
-package supply;
+package supply.agent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import jade.core.AID;
 import jade.core.Agent;
+import jade.lang.acl.ACLMessage;
 
 public abstract class MyAgent extends Agent {
 	
@@ -13,6 +15,8 @@ public abstract class MyAgent extends Agent {
 	protected abstract String[] GetParamsNames();
 	
 	protected abstract void FillWithArgs(Object[] args);
+	
+	public abstract IAgentInfo GetInfo();
 	
 	@Override
 	protected void setup() {
@@ -27,6 +31,21 @@ public abstract class MyAgent extends Agent {
 		return String.format("%s:%s(%s)", Name, FullClassName, parametrs);
 	}
 
+	public void SendInfo(String receiversName, IAgentInfo info) {
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+		String content = String.join(",", info.getInfo());
+		msg.setContent(content);
+		
+		msg.addReceiver(new AID(receiversName, AID.ISLOCALNAME));
+		this.send(msg);
+	}
+	
+	public IAgentInfo ProcessingMessageContent(String content, IAgentInfo info) {
+		String[] params = content.split(",");
+		info.CreateInfo(params);
+		return info;
+	}
+	
 	protected String ParseParametrs(String parametr, String[] paramsNames) {
 		var paramsAndValues = Arrays.asList(parametr.split(","));
 		List<String> allValues = new ArrayList<String>();

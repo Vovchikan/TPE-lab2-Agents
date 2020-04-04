@@ -1,18 +1,19 @@
 package supply.delivery;
 
-import jade.core.AID;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import supply.agent.IAgentInfo;
+import supply.cargo.CargoInfo;
 
-public class WaitBehaviour extends SimpleBehaviour {
+public class WaitCargoBehaviour extends SimpleBehaviour {
 
 	private boolean finished = false;
 	private boolean nextWait = true;
 	private boolean noFreePlaceForCargo = false;
 	private DeliveryAgent myAgent;
 
-	public WaitBehaviour(DeliveryAgent a) {
+	public WaitCargoBehaviour(DeliveryAgent a) {
 		super(a);
 		// TODO Auto-generated constructor stub
 		myAgent = a;
@@ -25,20 +26,14 @@ public class WaitBehaviour extends SimpleBehaviour {
 		
 		MessageTemplate m = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 		ACLMessage msg = myAgent.blockingReceive(m, 12000);
-		var res = ReceiveMessage(msg);
-		if(res) {
-			// Ответить отправителю об успехе
-			SendAnswer(msg.getSender().getLocalName(), "Accepted");
-		}
-		else {
-			if(noFreePlaceForCargo) {
-				SendAnswer(msg.getSender().getLocalName(), "No place.");
-				noFreePlaceForCargo = false;
-			}
-		}
+		var info = processingMessage(msg);
+		
+		if(info != null)
+			myAgent.SendInfo(msg.getSender().getLocalName(), info);
+		
 		if(nextWait) {
 			// Ожидать следующего запроса
-			myAgent.addBehaviour(new WaitBehaviour(myAgent));
+			myAgent.addBehaviour(new WaitCargoBehaviour(myAgent));
 		}
 		finished = true;
 		
@@ -50,23 +45,26 @@ public class WaitBehaviour extends SimpleBehaviour {
 		return finished;
 	}
 	
-	private boolean ReceiveMessage(ACLMessage msg) {
+	private DeliveryInfoForCargo processingMessage(ACLMessage msg) {
 		
 		if(msg != null) {
-			ICargoInfo cargoInfo = new CargoInfo(msg.getSender().toString(), msg.getSender().getLocalName());
-			cargoInfo.CreateInfoFromMessage(msg.getContent());
+			if(!msg.getSender().getLocalName().contains("CargoAgent"))
+				throw new UnsupportedOperationException();
+			IAgentInfo cargoInfo = new CargoInfo(msg.getSender().getLocalName());
+			DeliveryInfoForCargo deliveryInfoForCargo = new DeliveryInfoForCargo();
+			myAgent.ProcessingMessageContent(msg.getContent(), cargoInfo);
 			System.out.println(myAgent.getLocalName() + ": message from " + msg.getSender().getLocalName() + " was received.");
-			if(myAgent.CheckSpaceForCargo(cargoInfo)) {
+			if( myAgent.CheckSpaceForCargo((CargoInfo)cargoInfo) ) {
 				System.out.println(myAgent.getLocalName() + ": " + msg.getSender().getLocalName() + " is taken at my vehicle!");
 				// Добавить проверку на прохождение пути
 				// Если проверка не прошла, тогда вернуть false
 				// Если проверка прошла, добавить посылку в список
-				myAgent.AddCargo(cargoInfo);
-				return true;
+				myAgent.AddCargo((CargoInfo)cargoInfo);
+				deliveryInfoForCargo.Permission("true");
 			}
-			else {
-				return NoPlaceForCargo(msg);
-			}
+			else
+				deliveryInfoForCargo.Permission("false,No place for cargo");
+			return deliveryInfoForCargo;
 			
 		}
 		else {
@@ -74,22 +72,7 @@ public class WaitBehaviour extends SimpleBehaviour {
 			System.out.print(myAgent.getLocalName() + " takes this cargos: ");
 			myAgent.PrintAllCargos();
 			nextWait = false;
-			return false;
+			return null;
 		}
 	}
-	
-	private boolean NoPlaceForCargo(ACLMessage msg) {
-		System.out.println(myAgent.getLocalName() + ": I have no space for " + msg.getSender().getLocalName());
-		noFreePlaceForCargo = true;
-		return false;
-	}
-	
-	private void SendAnswer(String receiverName, String message) {
-		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		msg.setContent(message);
-		
-		msg.addReceiver(new AID(receiverName, AID.ISLOCALNAME));
-		myAgent.send(msg);
-	}
-
 }

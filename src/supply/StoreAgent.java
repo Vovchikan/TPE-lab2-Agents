@@ -1,5 +1,8 @@
 package supply;
 
+import supply.agent.IAgentInfo;
+import supply.agent.MyAgent;
+
 public class StoreAgent extends MyAgent {
 	private static int count = 1;
 	
@@ -25,5 +28,11 @@ public class StoreAgent extends MyAgent {
 		StoreName = (String)args[1];
 		deliveryHours.SetHours(args[2]);
 		
+	}
+
+	@Override
+	public IAgentInfo GetInfo() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
