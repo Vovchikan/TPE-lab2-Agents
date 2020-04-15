@@ -1,4 +1,4 @@
-package supply;
+package supply.store;
 
 public class DeliveryHours implements IDeliveryHours{
 

@@ -1,4 +1,4 @@
-package supply;
+package supply.store;
 
 import supply.agent.IAgentInfo;
 import supply.agent.MyAgent;

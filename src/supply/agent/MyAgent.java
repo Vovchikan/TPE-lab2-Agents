@@ -26,7 +26,7 @@ public abstract class MyAgent extends Agent {
 	public String CreateStringAgent(String line) {
 		String FullClassName = this.getClass().getName();
 		String Name = GetName();
-		String parametrs = ParseParametrs(line, GetParamsNames());
+		String parametrs = JoinParametrsForJadeConsole(line, GetParamsNames());
 		
 		return String.format("%s:%s(%s)", Name, FullClassName, parametrs);
 	}
@@ -46,7 +46,7 @@ public abstract class MyAgent extends Agent {
 		return info;
 	}
 	
-	protected String ParseParametrs(String parametr, String[] paramsNames) {
+	protected String JoinParametrsForJadeConsole(String parametr, String[] paramsNames) {
 		var paramsAndValues = Arrays.asList(parametr.split(","));
 		List<String> allValues = new ArrayList<String>();
 		for(String name: paramsNames) {

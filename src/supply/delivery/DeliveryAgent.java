@@ -1,8 +1,9 @@
 package supply.delivery;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-
+import jade.lang.acl.ACLMessage;
 import supply.agent.IAgentInfo;
 import supply.agent.MyAgent;
 import supply.cargo.CargoInfo;
@@ -29,9 +30,11 @@ public class DeliveryAgent extends MyAgent{
 	
 	private IVehicle vehicle;
 	private List<CargoInfo> cargosInfo;
+	public ArrayDeque<ACLMessage> accumulatedMessages;
 	
 	@Override
 	protected void FillWithArgs(Object[] args) {
+		accumulatedMessages = new ArrayDeque<ACLMessage>();
 		cargosInfo = new ArrayList<CargoInfo>();
 		vehicle = new Vehicle();
 		vehicle.SetType(args[0]);
@@ -58,5 +61,28 @@ public class DeliveryAgent extends MyAgent{
 	public IAgentInfo GetInfo() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public IAgentInfo GetAnswerInfoForCargo(String string) {
+		// TODO Auto-generated method stub
+		DeliveryInfoForCargo info = new DeliveryInfoForCargo();
+		info.Permission(string);
+		return info;
+	}
+
+	public IAgentInfo GetInfoForPath(CargoInfo cargoInfo) {
+		DeliveryInfoForPath info = new DeliveryInfoForPath(cargosInfo, cargoInfo);
+		
+		return info;
+	}
+
+	public String GetPathAgentName() {
+		// TODO Auto-generated method stub
+		return "PathAgent1";
+	}
+
+	public void UpdateRoute(List<CargoInfo> newRoat) {
+		// TODO Auto-generated method stub
+		cargosInfo = newRoat;
 	}
 }

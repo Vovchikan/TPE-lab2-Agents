@@ -61,6 +61,9 @@ public class Main {
 		else if(line.equals("DeliveryAgent") ){
 			creator = new DeliveryAgentStringCreator();
 		}
+		else if(line.equals("PathAgent")) {
+			creator = new PathAgentStringCreator();
+		}
 		return creator;
 	}
 

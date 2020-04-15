@@ -24,19 +24,15 @@ public class WaitCargoBehaviour extends SimpleBehaviour {
 		// TODO Auto-generated method stub
 		System.out.println(myAgent.getLocalName() + " is active.");
 		
+		ACLMessage msg = null;
+		if(myAgent.accumulatedMessages.peek()==null) {
 		MessageTemplate m = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-		ACLMessage msg = myAgent.blockingReceive(m, 12000);
-		var info = processingMessage(msg);
+		 msg = myAgent.blockingReceive(m, 12000);
+		} else msg = myAgent.accumulatedMessages.pop();
+		var b = processingMessage(msg);
 		
-		if(info != null)
-			myAgent.SendInfo(msg.getSender().getLocalName(), info);
-		
-		if(nextWait) {
-			// ќжидать следующего запроса
-			myAgent.addBehaviour(new WaitCargoBehaviour(myAgent));
-		}
+		myAgent.addBehaviour(b);
 		finished = true;
-		
 	}
 
 	@Override
@@ -45,34 +41,28 @@ public class WaitCargoBehaviour extends SimpleBehaviour {
 		return finished;
 	}
 	
-	private DeliveryInfoForCargo processingMessage(ACLMessage msg) {
-		
+	private SimpleBehaviour processingMessage(ACLMessage msg) {
+		SimpleBehaviour behaviour;
 		if(msg != null) {
 			if(!msg.getSender().getLocalName().contains("CargoAgent"))
 				throw new UnsupportedOperationException();
 			IAgentInfo cargoInfo = new CargoInfo(msg.getSender().getLocalName());
-			DeliveryInfoForCargo deliveryInfoForCargo = new DeliveryInfoForCargo();
+			
 			myAgent.ProcessingMessageContent(msg.getContent(), cargoInfo);
 			System.out.println(myAgent.getLocalName() + ": message from " + msg.getSender().getLocalName() + " was received.");
-			if( myAgent.CheckSpaceForCargo((CargoInfo)cargoInfo) ) {
-				System.out.println(myAgent.getLocalName() + ": " + msg.getSender().getLocalName() + " is taken at my vehicle!");
-				// ƒобавить проверку на прохождение пути
-				// ≈сли проверка не прошла, тогда вернуть false
-				// ≈сли проверка прошла, добавить посылку в список
-				myAgent.AddCargo((CargoInfo)cargoInfo);
-				deliveryInfoForCargo.Permission("true");
+			
+			var ci = (CargoInfo)cargoInfo;
+			if( myAgent.CheckSpaceForCargo(ci) ) {
+				myAgent.SendInfo(myAgent.GetPathAgentName(), myAgent.GetInfoForPath(ci));
+				behaviour = new WaitPathBehaviour(myAgent, ci);
 			}
 			else
-				deliveryInfoForCargo.Permission("false,No place for cargo");
-			return deliveryInfoForCargo;
+				behaviour = new UnAcceptedAnswerForCargo(myAgent, ci, "No place for cargo");
 			
 		}
 		else {
-			System.out.println(myAgent.getLocalName() + ": empty message was received");
-			System.out.print(myAgent.getLocalName() + " takes this cargos: ");
-			myAgent.PrintAllCargos();
-			nextWait = false;
-			return null;
+			behaviour = new FinishBehaviour(myAgent);
 		}
+		return behaviour;
 	}
 }
