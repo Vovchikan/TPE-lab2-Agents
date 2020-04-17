@@ -21,6 +21,12 @@ public class StoreAgent extends MyAgent {
 	private String StoreName;
 
 	@Override
+	protected void setup() {
+		// TODO Auto-generated method stub
+		super.setup();
+	}
+	
+	@Override
 	protected void FillWithArgs(Object[] args) {
 		location = new LocationInt();
 		deliveryHours = new DeliveryHours();
@@ -29,10 +35,29 @@ public class StoreAgent extends MyAgent {
 		deliveryHours.SetHours(args[2]);
 		
 	}
+	
+	@Override
+	public String CreateStringAgent(String line) {
+		// TODO Auto-generated method stub
+		String FullClassName = this.getClass().getName();
+		String Name = GetMyName(line);
+		String parametrs = JoinParametrsForJadeConsole(line, GetParamsNames());
+		
+		return String.format("%s:%s(%s)", Name, FullClassName, parametrs);
+	}
 
 	@Override
 	public IAgentInfo GetInfo() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private String GetMyName(String line) {
+		var params = line.split(",");
+		for (String param : params) {
+			if(param.contains("Name"))
+				return param.replaceAll("Name:", "");
+		}
+		throw new UnsupportedOperationException();
 	}
 }

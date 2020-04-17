@@ -11,4 +11,16 @@ public class LocationInt implements ILocation{
 		x = Integer.parseInt(coords[0]);
 		y = Integer.parseInt(coords[1]);
 	}
+
+	@Override
+	public int GetX() {
+		// TODO Auto-generated method stub
+		return x;
+	}
+
+	@Override
+	public int GetY() {
+		// TODO Auto-generated method stub
+		return y;
+	}
 }

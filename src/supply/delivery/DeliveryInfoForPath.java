@@ -21,6 +21,7 @@ public class DeliveryInfoForPath implements IAgentInfo {
 
 	private List<CargoInfo> cargos;
 	private CargoInfo cargo;
+	private double speed;
 	private String sepInCargo=" "; // Разделитель который разбивает информацию внутри каждого CargoInfo
 	
 	
@@ -40,6 +41,7 @@ public class DeliveryInfoForPath implements IAgentInfo {
 		}
 		cargo = new CargoInfo();
 		cargo.CreateInfo(params[1].split(sepInCargo));
+		speed = Double.parseDouble(params[2]);
 
 	}
 
@@ -57,6 +59,7 @@ public class DeliveryInfoForPath implements IAgentInfo {
 				list.add(String.join(sepInCargo, ci.getInfo()));
 			}
 		}
+		list.add(Double.toString(speed));
 		return list.toArray(new String[0]);
 	}
 
@@ -65,5 +68,27 @@ public class DeliveryInfoForPath implements IAgentInfo {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	public TreeMap<String, CargoInfo> getCargoInfoTreeMap(){
+		var map = new TreeMap<String, CargoInfo>();
+		int i = 1;
+		map.put("cargo", cargo);
+		for (CargoInfo ci : cargos) {
+			map.put(ci+Integer.toString(i), ci);
+			i++;
+		}
+		return map;
+	}
+	
+	public boolean HaveRoute() {
+		return cargos != null && cargos.size() > 0;
+	}
+	
+	public List<CargoInfo> GetRoute(){
+		return cargos;
+	}
+	
+	public double GetSpeed() {
+		return speed;
+	}
 }
