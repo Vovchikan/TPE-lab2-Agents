@@ -80,7 +80,7 @@ public class PathAgent extends MyAgent {
 		int time = ri.getLastTimeValue() + CountRoadTime(speed, CountRoadLength(ri.getLastPoint(), end));
 		int delay = check(time, mintime, maxtime);
 		if(delay >= 0) {
-			ri.add(cargoInfo, delay, end, time);
+			ri.add(cargoInfo, delay, end, time+delay);
 			return true;
 		} else {
 			return false;

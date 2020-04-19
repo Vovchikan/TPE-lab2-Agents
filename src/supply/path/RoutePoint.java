@@ -37,5 +37,29 @@ public class RoutePoint implements Serializable {
 	public Point getLastPoint() {
 		return lastPoint;
 	}
+	
+	@Override
+	public String toString() {
+		String format = "{Cargo: %s, Weight: %.2f, Location: (%d,%d) , Delay: %d, time: %d:%s}";
+		
+		int x = lastPoint.x;
+		int y = lastPoint.y;
+		int hours = getHours();
+		String minuts = getMinuts();
+		return String.format(format, ci.Name, ci.Weight, x, y, delay, hours, minuts);
+	}
 
+	private String getMinuts() {
+		int res = lastTimeValue % 60;
+		if(res == 0)
+			return "00";
+		if(res / 10 == 0)
+			return "0"+Integer.toString(res);
+		else
+			return Integer.toString(res);
+	}
+
+	private int getHours() {
+		return lastTimeValue / 60;
+	}
 }

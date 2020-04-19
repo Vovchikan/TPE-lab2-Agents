@@ -70,4 +70,10 @@ public class DeliveryAgent extends MyAgent{
 		// TODO Auto-generated method stub
 		routeInfo = newRoat;
 	}
+	
+	public String printRoute() {
+		String format = "\nName: %s, Vehicle weigth: %.2f, Vehicle freeWeight: %.2f, RouteInfo: %s\n";
+		return String.format(format, getLocalName(), vehicle.GetWeight(), 
+				vehicle.GetFreeWeight(), routeInfo.toString());
+	}
 }

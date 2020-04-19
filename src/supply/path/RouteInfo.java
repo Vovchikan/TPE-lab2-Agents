@@ -48,5 +48,15 @@ public class RouteInfo extends AgentInfo {
 	public static RouteInfo CreateFromString(String s) {
 		return (RouteInfo)AgentInfo.CreateFromString(s);
 	}
-
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		String res = "Nachalo"; int i = 1;
+		for (RoutePoint routePoint : routePoints) {
+			res += "\n" + i++ + ". ";
+			res += routePoint.toString();
+		}
+		return res;
+	}
 }
