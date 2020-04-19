@@ -38,6 +38,10 @@ public class RoutePoint implements Serializable {
 		return lastPoint;
 	}
 	
+	public int getLastTimeValue() {
+		return lastTimeValue;
+	}
+
 	@Override
 	public String toString() {
 		String format = "{Cargo: %s, Weight: %.2f, Location: (%d,%d) , Delay: %d, time: %d:%s}";

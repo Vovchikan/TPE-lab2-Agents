@@ -25,13 +25,13 @@ public class PathAgent extends MyAgent {
 	@Override
 	protected String[] GetParamsNames() {
 		// TODO Auto-generated method stub
-		return new String[] {"SecondName"};
+		return new String[] { "SecondName" };
 	}
 
 	@Override
 	protected void FillWithArgs(Object[] args) {
 		accumulatedMessages = new ArrayDeque<ACLMessage>();
-		SecondName = (String)args[0];
+		SecondName = (String) args[0];
 	}
 
 	@Override
@@ -40,58 +40,51 @@ public class PathAgent extends MyAgent {
 		super.setup();
 		addBehaviour(new WaitDeliveryBehaviour(this));
 	}
-	
+
 	@Override
 	public IAgentInfo GetInfo() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<CargoInfo> FindNewRoute(DeliveryInfoForPath deliveryInfoForPath) {
-		// TODO Auto-generated method stub
-		// Найти маршрут только для одного груза, значит был передан только один груз и
-		// в словаре не будет ключей с именем "ci"
-		// Есть уже готовый маршрут и нужно попробовать добавить груз в него
-		// В первом случае начальной точкой будет координата 0:0 и время 8:30
-		// Во втором случае начальной точкой будет конечные данные маршрута, значит
-		// нужная функция для получения этих начальных данных
-		// Также нужна функция для высчитывания расстояния, времени на дорогу
-		// Для высчитывания времени нужно знать скорость грузовика, значит надо её как-то передать
-		// Для высчитывания расстояния нужно знать начальную и конечную точку
-		
-		return null;
-	}
-	
 	private int CountRoadTime(Double speed, double roadLength) {
-		int time = (int) Math.ceil(roadLength/speed);
+		int time = (int) Math.ceil(roadLength / speed);
 		return time;
 	}
-	
+
 	private double CountRoadLength(Point start, Point end) {
-		double length = Math.sqrt( Math.pow(start.x-end.x,2) + Math.pow(start.y-end.y, 2) );
+		double length = Math.sqrt(Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2));
 		return length;
 	}
-	
+
 	public int ConvertTimeToMinuts(int hours, int minut) {
-		return hours*60 + minut;
+		return hours * 60 + minut;
 	}
-	
+
 	public boolean cc(RouteInfo ri, double speed, Point end, int mintime, int maxtime, CargoInfo cargoInfo) {
-		int time = ri.getLastTimeValue() + CountRoadTime(speed, CountRoadLength(ri.getLastPoint(), end));
-		int delay = check(time, mintime, maxtime);
-		if(delay >= 0) {
-			ri.add(cargoInfo, delay, end, time+delay);
+		// Для начала нужно проверить, есть ли груз в существующем маршруте
+		int i = ri.hasThisDestinationInRoute(cargoInfo.Destination);
+		if (i >= 0) {
+			ri.addExistDestination(cargoInfo, i);
 			return true;
 		} else {
-			return false;
+
+			int time = ri.getLastTimeValue() + CountRoadTime(speed, CountRoadLength(ri.getLastPoint(), end));
+			int delay = check(time, mintime, maxtime);
+			if (delay >= 0) {
+				ri.add(cargoInfo, delay, end, time + delay);
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 
 	private int check(int time, int mintime, int maxtime) {
 		// TODO Auto-generated method stub
-		if(time < mintime)
+		if (time < mintime)
 			return mintime - time;
-		if(time >= mintime && time <= maxtime)
+		if (time >= mintime && time <= maxtime)
 			return 0;
 		else
 			return -1;

@@ -15,7 +15,7 @@ public class RouteInfo extends AgentInfo {
 
 	public RouteInfo() {
 		routePoints = new ArrayList<RoutePoint>();
-		lastTimeValue = 8*60 + 30; // 8 hours and 30 minuts
+		lastTimeValue = 8 * 60 + 30; // 8 hours and 30 minuts
 		lastPoint = new Point(0, 0);
 	}
 
@@ -24,7 +24,7 @@ public class RouteInfo extends AgentInfo {
 		lastTimeValue = ltv;
 		lastPoint = lp;
 	}
-	
+
 	public ArrayList<RoutePoint> getRoutePoints() {
 		return routePoints;
 	}
@@ -46,17 +46,33 @@ public class RouteInfo extends AgentInfo {
 	}
 
 	public static RouteInfo CreateFromString(String s) {
-		return (RouteInfo)AgentInfo.CreateFromString(s);
+		return (RouteInfo) AgentInfo.CreateFromString(s);
 	}
-	
+
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		String res = "Nachalo"; int i = 1;
+		String res = "Nachalo";
+		int i = 1;
 		for (RoutePoint routePoint : routePoints) {
 			res += "\n" + i++ + ". ";
 			res += routePoint.toString();
 		}
 		return res;
+	}
+
+	public int hasThisDestinationInRoute(String destination) {
+		int i = 0;
+		for (RoutePoint routePoint : routePoints) {
+			if (routePoint.getCi().Destination == destination)
+				return i;
+		}
+		return -1;
+	}
+
+	public void addExistDestination(CargoInfo cargoInfo, int index) {
+		routePoints.add(index + 1, new RoutePoint(cargoInfo, 0, routePoints.get(index).getLastPoint(),
+				routePoints.get(index).getLastTimeValue()));
+
 	}
 }
