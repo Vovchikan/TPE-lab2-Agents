@@ -3,7 +3,6 @@ package supply.delivery;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import supply.agent.IAgentInfo;
 import supply.cargo.CargoInfo;
 
 public class WaitCargoBehaviour extends SimpleBehaviour {
@@ -25,10 +24,13 @@ public class WaitCargoBehaviour extends SimpleBehaviour {
 		System.out.println(myAgent.getLocalName() + " is active.");
 		
 		ACLMessage msg = null;
+		
+		// Если нет отложенных сообщений - ждём новое
 		if(myAgent.accumulatedMessages.peek()==null) {
 		MessageTemplate m = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 		 msg = myAgent.blockingReceive(m, 12000);
 		} else msg = myAgent.accumulatedMessages.pop();
+		
 		var b = processingMessage(msg);
 		
 		myAgent.addBehaviour(b);
@@ -46,12 +48,10 @@ public class WaitCargoBehaviour extends SimpleBehaviour {
 		if(msg != null) {
 			if(!msg.getSender().getLocalName().contains("CargoAgent"))
 				throw new UnsupportedOperationException();
-			IAgentInfo cargoInfo = new CargoInfo(msg.getSender().getLocalName());
+			CargoInfo ci = CargoInfo.CreateFromString(msg.getContent());
 			
-			myAgent.ProcessingMessageContent(msg.getContent(), cargoInfo);
 			System.out.println(myAgent.getLocalName() + ": message from " + msg.getSender().getLocalName() + " was received.");
 			
-			var ci = (CargoInfo)cargoInfo;
 			if( myAgent.CheckSpaceForCargo(ci) ) {
 				myAgent.SendInfo(myAgent.GetPathAgentName(), myAgent.GetInfoForPath(ci));
 				behaviour = new WaitPathBehaviour(myAgent, ci);

@@ -1,5 +1,6 @@
 package supply.agent;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,19 +32,22 @@ public abstract class MyAgent extends Agent {
 		return String.format("%s:%s(%s)", Name, FullClassName, parametrs);
 	}
 
-	public void SendInfo(String receiversName, IAgentInfo info) {
+	public void SendInfo(String receiversName, IAgentInfo info){
 		ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-		String content = String.join(",", info.getInfo());
+		String content = null;
+		try {
+			content = info.serializeToString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		msg.setContent(content);
 		
 		msg.addReceiver(new AID(receiversName, AID.ISLOCALNAME));
 		this.send(msg);
-	}
-	
-	public IAgentInfo ProcessingMessageContent(String content, IAgentInfo info) {
-		String[] params = content.split(",");
-		info.CreateInfo(params);
-		return info;
+		String sep = "##############################################################################\n";
+		System.out.println(String.format("%sAgent: %s ------> Agent: %s\n%s", 
+				sep, this.getLocalName(), receiversName, sep));
 	}
 	
 	protected String JoinParametrsForJadeConsole(String parametr, String[] paramsNames) {

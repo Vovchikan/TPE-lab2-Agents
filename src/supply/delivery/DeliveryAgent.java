@@ -7,6 +7,7 @@ import jade.lang.acl.ACLMessage;
 import supply.agent.IAgentInfo;
 import supply.agent.MyAgent;
 import supply.cargo.CargoInfo;
+import supply.path.RouteInfo;
 
 public class DeliveryAgent extends MyAgent{
 	private static int count = 1;
@@ -29,32 +30,23 @@ public class DeliveryAgent extends MyAgent{
 	}
 	
 	private IVehicle vehicle;
-	private List<CargoInfo> cargosInfo;
 	public ArrayDeque<ACLMessage> accumulatedMessages;
+	private RouteInfo routeInfo;
 	
 	@Override
 	protected void FillWithArgs(Object[] args) {
 		accumulatedMessages = new ArrayDeque<ACLMessage>();
-		cargosInfo = new ArrayList<CargoInfo>();
 		vehicle = new Vehicle();
+		routeInfo = null;
 		vehicle.SetType(args[0]);
 	}
 	
 	public void AddCargo(CargoInfo cargoInfo) {
-		cargosInfo.add(cargoInfo);
-		vehicle.PutCargo(cargoInfo.GetWeight());
+		vehicle.PutCargo(cargoInfo.Weight);
 	}
 	
 	public boolean CheckSpaceForCargo(CargoInfo cargoInfo) {
-		return cargoInfo.GetWeight() <= vehicle.GetFreeWeight();
-	}
-
-	public void PrintAllCargos() {
-		// TODO Auto-generated method stub
-		for(CargoInfo info : cargosInfo) {
-			info.PrintInConsole();
-		}
-		System.out.println();
+		return cargoInfo.Weight <= vehicle.GetFreeWeight();
 	}
 
 	@Override
@@ -63,15 +55,8 @@ public class DeliveryAgent extends MyAgent{
 		return null;
 	}
 
-	public IAgentInfo GetAnswerInfoForCargo(String string) {
-		// TODO Auto-generated method stub
-		DeliveryInfoForCargo info = new DeliveryInfoForCargo();
-		info.Permission(string);
-		return info;
-	}
-
 	public IAgentInfo GetInfoForPath(CargoInfo cargoInfo) {
-		DeliveryInfoForPath info = new DeliveryInfoForPath(cargosInfo, cargoInfo);
+		DeliveryInfoForPath info = new DeliveryInfoForPath(vehicle, routeInfo, cargoInfo);
 		
 		return info;
 	}
@@ -81,8 +66,8 @@ public class DeliveryAgent extends MyAgent{
 		return "PathAgent1";
 	}
 
-	public void UpdateRoute(List<CargoInfo> newRoat) {
+	public void UpdateRoute(RouteInfo newRoat) {
 		// TODO Auto-generated method stub
-		cargosInfo = newRoat;
+		routeInfo = newRoat;
 	}
 }

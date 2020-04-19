@@ -20,9 +20,7 @@ public class UnAcceptedAnswerForCargo extends SimpleBehaviour {
 	@Override
 	public void action() {
 		// TODO Auto-generated method stub
-		var info = new DeliveryInfoForCargo();
-		info.Permission("false,"+reason);
-		myAgent.SendInfo(cargoInfo.GetName(), info);
+		myAgent.SendInfo(cargoInfo.Name, new DeliveryInfoForCargo(false, reason));
 		myAgent.addBehaviour(new WaitCargoBehaviour(myAgent));
 		
 		finished = true;

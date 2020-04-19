@@ -1,7 +1,7 @@
 StoreAgent
 Location:33|22, Name:Mango,     DeliveryHours:11|20-12|30
-Location:11|130,Name:Qucksilver,DeliveryHours:11-14
-Location:44|26, Name:Zara,      DeliveryHours:13-14|30
+Location:11|130,Name:Quicksilver,DeliveryHours:11|0-14|0
+Location:44|26, Name:Zara,      DeliveryHours:13|0-14|30
 DeliveryAgent
 Type:Small
 Type:Middle

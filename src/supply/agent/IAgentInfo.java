@@ -1,9 +1,7 @@
 package supply.agent;
 
-import java.util.TreeMap;
+import java.io.IOException;
 
 public interface IAgentInfo {
-	void CreateInfo(String[] params);
-	String[] getInfo();
-	TreeMap<String, String> getInfoTreeMap();
+	String serializeToString() throws IOException;
 }

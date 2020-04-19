@@ -24,8 +24,8 @@ public class AcceptedAnswerForCargo extends SimpleBehaviour {
 	public void action() {
 		// TODO Auto-generated method stub
 		String format = "%s: %s is taken at my vehicle!";
-		System.out.println(String.format(format, myAgent.getLocalName(), cargoInfo.GetName()));
-		myAgent.SendInfo(cargoInfo.GetName(), myAgent.GetAnswerInfoForCargo("true"));
+		System.out.println(String.format(format, myAgent.getLocalName(), cargoInfo.Name));
+		myAgent.SendInfo(cargoInfo.Name, new DeliveryInfoForCargo(true, null));
 		myAgent.addBehaviour(new WaitCargoBehaviour(myAgent));
 		
 		finished = true;

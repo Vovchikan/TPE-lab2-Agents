@@ -1,6 +1,8 @@
 package supply.delivery;
 
-public class Vehicle implements IVehicle {
+import java.io.Serializable;
+
+public class Vehicle implements IVehicle, Serializable {
 
 	private int weight;
 	private double speed;

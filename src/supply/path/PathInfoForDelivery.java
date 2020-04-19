@@ -1,67 +1,26 @@
 package supply.path;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
+import supply.agent.AgentInfo;
 
-import supply.agent.IAgentInfo;
-import supply.cargo.CargoInfo;
-
-public class PathInfoForDelivery implements IAgentInfo {
-	private List<CargoInfo> cargos;
-	private String sepInCargoInfo=" ";
-
-	public PathInfoForDelivery() {
-	}
+public class PathInfoForDelivery extends AgentInfo {
 	
-	public PathInfoForDelivery(List<CargoInfo> cargos) {
-		this.cargos = cargos;
+	private RouteInfo ri;
+
+	public PathInfoForDelivery(RouteInfo ri) {
+		this.ri = ri;
 	}
 
-	@Override
-	public void CreateInfo(String[] params) {
+	public RouteInfo getRoate() {
 		// TODO Auto-generated method stub
-		if(params[0].toLowerCase() == "false") {
-			cargos = null;
-		}
-		if(params[0].toLowerCase() == "true") {
-			cargos = new ArrayList<CargoInfo>();
-			for (int i = 0; i < params.length; i++) {
-				var ci = new CargoInfo();
-				ci.CreateInfo(params[i].split(sepInCargoInfo));
-			}
-		}
+		return ri;
 	}
 
-	@Override
-	public String[] getInfo() {
-		List<String> list = new ArrayList<String>();
-		if(cargos == null)
-			list.add("false");
-		else {
-			list.add("true");
-			for (CargoInfo ci : cargos) {
-				list.add(String.join(sepInCargoInfo, ci.getInfo()));
-			}
-		}
-		return list.toArray(new String[0]);
-	}
-
-	@Override
-	public TreeMap<String, String> getInfoTreeMap() {
-		// TODO Auto-generated method stub
-		return null;
+	public static PathInfoForDelivery CreateFromString(String s) {
+		return (PathInfoForDelivery)AgentInfo.CreateFromString(s);
 	}
 
 	public boolean isSuccess() {
 		// TODO Auto-generated method stub
-		return cargos!=null && cargos.size() > 0;
+		return ri != null;
 	}
-
-	public List<CargoInfo> GetRoat() {
-		// TODO Auto-generated method stub
-		return cargos;
-	}
-
-	
 }

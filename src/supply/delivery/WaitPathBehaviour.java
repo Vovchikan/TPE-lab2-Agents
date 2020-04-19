@@ -12,10 +12,6 @@ public class WaitPathBehaviour extends SimpleBehaviour {
 	private boolean finished;
 	private CargoInfo ci;
 
-	public WaitPathBehaviour() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public WaitPathBehaviour(DeliveryAgent a, CargoInfo ci) {
 		super(a);
 		// TODO Auto-generated constructor stub
@@ -43,14 +39,14 @@ public class WaitPathBehaviour extends SimpleBehaviour {
 				myAgent.accumulatedMessages.add(msg);
 				behaviour = new WaitPathBehaviour(myAgent, ci);
 			} else {
-				var pathInfoForDelivery = new PathInfoForDelivery();
+				var pathInfoForDelivery = PathInfoForDelivery.CreateFromString(msg.getContent());
 
-				myAgent.ProcessingMessageContent(msg.getContent(), pathInfoForDelivery);
 				System.out.println(
 						myAgent.getLocalName() + ": message from " + msg.getSender().getLocalName() + " was received.");
 
 				if (pathInfoForDelivery.isSuccess()) {
-					myAgent.UpdateRoute(pathInfoForDelivery.GetRoat());
+					myAgent.UpdateRoute(pathInfoForDelivery.getRoate());
+					myAgent.AddCargo(ci);
 					behaviour = new AcceptedAnswerForCargo(myAgent, ci);
 				} else
 					behaviour = new UnAcceptedAnswerForCargo(myAgent, ci, "Can't find roat for you ;(");

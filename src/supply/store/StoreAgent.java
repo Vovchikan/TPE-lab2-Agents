@@ -24,6 +24,7 @@ public class StoreAgent extends MyAgent {
 	protected void setup() {
 		// TODO Auto-generated method stub
 		super.setup();
+		addBehaviour(new WaitPathBehaviour(this));
 	}
 	
 	@Override
@@ -33,7 +34,6 @@ public class StoreAgent extends MyAgent {
 		location.SetLocation(args[0]);
 		StoreName = (String)args[1];
 		deliveryHours.SetHours(args[2]);
-		
 	}
 	
 	@Override
@@ -49,7 +49,8 @@ public class StoreAgent extends MyAgent {
 	@Override
 	public IAgentInfo GetInfo() {
 		// TODO Auto-generated method stub
-		return null;
+		var si = new StoreInfoForPath(location, deliveryHours);
+		return si;
 	}
 	
 	private String GetMyName(String line) {

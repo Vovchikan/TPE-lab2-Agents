@@ -44,6 +44,6 @@ public class CargoAgent extends MyAgent{
 	@Override
 	public IAgentInfo GetInfo() {
 		// TODO Auto-generated method stub
-		return new CargoInfo(this);
+		return new CargoInfo(getLocalName(), weight, destinationAddress);
 	}
 }

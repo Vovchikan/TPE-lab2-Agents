@@ -1,33 +1,26 @@
 package supply.path;
 
-import java.util.List;
-
 import jade.core.behaviours.SimpleBehaviour;
-import supply.cargo.CargoInfo;
 
 public class AnswerForDeliveryBehaviour extends SimpleBehaviour {
 
 	private PathAgent myAgent;
 	private String deliveryAgentName;
-	private List<CargoInfo> cargos;
 	private boolean finished;
-	
-	public AnswerForDeliveryBehaviour() {
-		// TODO Auto-generated constructor stub
-	}
+	private RouteInfo ri;
 
-	public AnswerForDeliveryBehaviour(PathAgent a, String deliveryAgentName, List<CargoInfo> cargos) {
-		super(a);
+	public AnswerForDeliveryBehaviour(PathAgent myAgent, RouteInfo ri, String deliveryAgentName) {
+		super(myAgent);
 		// TODO Auto-generated constructor stub
-		this.myAgent = a;
+		this.myAgent = myAgent;
 		this.deliveryAgentName = deliveryAgentName;
-		this.cargos = cargos;
+		this.ri = ri;
 	}
 
 	@Override
 	public void action() {
 		// TODO Auto-generated method stub
-		myAgent.SendInfo(deliveryAgentName, new PathInfoForDelivery(cargos));
+		myAgent.SendInfo(deliveryAgentName, new PathInfoForDelivery(ri));
 		myAgent.addBehaviour(new WaitDeliveryBehaviour(myAgent));
 		finished = true;
 	}
