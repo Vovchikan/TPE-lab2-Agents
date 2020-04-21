@@ -18,11 +18,11 @@ public class WaitPathBehaviour extends SimpleBehaviour {
 	@Override
 	public void action() {
 		MessageTemplate m = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-		ACLMessage msg = myAgent.blockingReceive(m, 12000);
+		ACLMessage msg = myAgent.blockingReceive(m, 20000);
 		var b = processingBehaviour(msg);
 		myAgent.addBehaviour(b);
 		
-		finished = false;
+		finished = true;
 	}
 	
 	private SimpleBehaviour processingBehaviour(ACLMessage msg) {
@@ -34,7 +34,6 @@ public class WaitPathBehaviour extends SimpleBehaviour {
 			bahaviour = new WaitPathBehaviour(myAgent);
 		}else {
 			bahaviour = new FinishBehaviour(myAgent);
-			System.out.println(String.format("\n%s: I've got an EMPTY message, my work is done!\n", myAgent.getLocalName()));
 		}
 		
 		return bahaviour;

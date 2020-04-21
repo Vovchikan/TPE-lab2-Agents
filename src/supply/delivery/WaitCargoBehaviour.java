@@ -21,14 +21,14 @@ public class WaitCargoBehaviour extends SimpleBehaviour {
 	@Override
 	public void action() {
 		// TODO Auto-generated method stub
-		System.out.println(myAgent.getLocalName() + " is active.");
+		System.out.println(myAgent.getLocalName() + " is waiting message from cargo.");
 		
 		ACLMessage msg = null;
 		
 		// Если нет отложенных сообщений - ждём новое
 		if(myAgent.accumulatedMessages.peek()==null) {
 		MessageTemplate m = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-		 msg = myAgent.blockingReceive(m, 12000);
+		 msg = myAgent.blockingReceive(m, myAgent.getWaitDelay());
 		} else msg = myAgent.accumulatedMessages.pop();
 		
 		var b = processingMessage(msg);

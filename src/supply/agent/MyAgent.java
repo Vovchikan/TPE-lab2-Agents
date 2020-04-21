@@ -44,10 +44,10 @@ public abstract class MyAgent extends Agent {
 		msg.setContent(content);
 		
 		msg.addReceiver(new AID(receiversName, AID.ISLOCALNAME));
-		this.send(msg);
 		String sep = "##############################################################################\n";
 		System.out.println(String.format("%sAgent: %s ------> Agent: %s\n%s", 
 				sep, this.getLocalName(), receiversName, sep));
+		this.send(msg);
 	}
 	
 	protected String JoinParametrsForJadeConsole(String parametr, String[] paramsNames) {
