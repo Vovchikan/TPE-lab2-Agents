@@ -66,6 +66,7 @@ public class RouteInfo extends AgentInfo {
 		for (RoutePoint routePoint : routePoints) {
 			if (routePoint.getCi().Destination == destination)
 				return i;
+			i++;
 		}
 		return -1;
 	}

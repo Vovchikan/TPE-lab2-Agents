@@ -1,0 +1,7 @@
+
+Name: DeliveryAgent3, Vehicle weigth: 200,00, Vehicle freeWeight: 6,00, RouteInfo: Nachalo
+1. {Cargo: CargoAgent5, Weight: 125,00, Location: (11,130) , Delay: 147, time: 11:00}
+2. {Cargo: CargoAgent3, Weight: 23,00, Location: (44,26) , Delay: 118, time: 13:00}
+3. {Cargo: CargoAgent9, Weight: 23,00, Location: (44,26) , Delay: 0, time: 13:00}
+4. {Cargo: CargoAgent12, Weight: 23,00, Location: (44,26) , Delay: 0, time: 13:00}
+
