@@ -1,38 +1,37 @@
 package supply.delivery;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
 import jade.lang.acl.ACLMessage;
 import supply.agent.IAgentInfo;
 import supply.agent.MyAgent;
 import supply.cargo.CargoInfo;
 import supply.path.RouteInfo;
 
-public class DeliveryAgent extends MyAgent{
+public class DeliveryAgent extends MyAgent {
 	private static int count = 1;
-	
+	private int waitDelay = 5000;
+
 	@Override
 	protected String[] GetParamsNames() {
-		return new String[] {"Type"};
+		return new String[] { "Type" };
 	}
-	
+
 	@Override
 	protected int GetNumber() {
 		return count++;
 	}
-	
+
 	@Override
 	protected void setup() {
 		// TODO Auto-generated method stub
 		super.setup();
 		addBehaviour(new WaitCargoBehaviour(this));
 	}
-	
+
 	private IVehicle vehicle;
 	public ArrayDeque<ACLMessage> accumulatedMessages;
 	private RouteInfo routeInfo;
-	
+
 	@Override
 	protected void FillWithArgs(Object[] args) {
 		accumulatedMessages = new ArrayDeque<ACLMessage>();
@@ -40,11 +39,11 @@ public class DeliveryAgent extends MyAgent{
 		routeInfo = null;
 		vehicle.SetType(args[0]);
 	}
-	
+
 	public void AddCargo(CargoInfo cargoInfo) {
 		vehicle.PutCargo(cargoInfo.Weight);
 	}
-	
+
 	public boolean CheckSpaceForCargo(CargoInfo cargoInfo) {
 		return cargoInfo.Weight <= vehicle.GetFreeWeight();
 	}
@@ -57,7 +56,7 @@ public class DeliveryAgent extends MyAgent{
 
 	public IAgentInfo GetInfoForPath(CargoInfo cargoInfo) {
 		DeliveryInfoForPath info = new DeliveryInfoForPath(vehicle, routeInfo, cargoInfo);
-		
+
 		return info;
 	}
 
@@ -66,14 +65,18 @@ public class DeliveryAgent extends MyAgent{
 		return "PathAgent1";
 	}
 
+	public int getWaitDelay() {
+		return waitDelay;
+	}
+
 	public void UpdateRoute(RouteInfo newRoat) {
 		// TODO Auto-generated method stub
 		routeInfo = newRoat;
 	}
-	
+
 	public String printRoute() {
 		String format = "\nName: %s, Vehicle weigth: %.2f, Vehicle freeWeight: %.2f, RouteInfo: %s\n";
-		return String.format(format, getLocalName(), vehicle.GetWeight(), 
-				vehicle.GetFreeWeight(), routeInfo.toString());
+		return String.format(format, getLocalName(), vehicle.GetWeight(), vehicle.GetFreeWeight(),
+				routeInfo.toString());
 	}
 }

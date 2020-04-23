@@ -14,7 +14,7 @@ public class FinishBehaviour extends SimpleBehaviour {
 	@Override
 	public void action() {
 		// TODO Auto-generated method stub
-		String format = "\n%s: nobody want to knew my location and deliveryHours\n";
+		String format = "\n%s: I've got an EMPTY message, my work is done!\n";
 		System.out.println(String.format(format, myAgent.getLocalName()));
 		finished = true;
 	}

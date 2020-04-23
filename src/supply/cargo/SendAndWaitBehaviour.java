@@ -1,5 +1,10 @@
 package supply.cargo;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
 import jade.core.behaviours.*;
 import jade.lang.acl.*;
 import supply.delivery.DeliveryInfoForCargo;
@@ -19,6 +24,7 @@ public class SendAndWaitBehaviour extends SimpleBehaviour {
 	@Override
 	public void action() {
 		DeliveryInfoForCargo info = null;
+		receiversNames = shuffleArray(receiversNames);
 		for (int i = 0; i < receiversNames.length; i++) {
 			System.out.println(myAgent.getLocalName() + " is trying to find free deliverAgent.");
 			myAgent.SendInfo(receiversNames[i], myAgent.GetInfo());
@@ -58,4 +64,9 @@ public class SendAndWaitBehaviour extends SimpleBehaviour {
 		return null;
 	}
 
+	private String[] shuffleArray(String[] arr) {
+		var l = Arrays.asList(arr);
+		Collections.shuffle(l);
+		return l.toArray(new String[0]);
+	}
 }

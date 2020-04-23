@@ -23,7 +23,7 @@ public class WaitPathBehaviour extends SimpleBehaviour {
 	public void action() {
 		// TODO Auto-generated method stub
 		MessageTemplate m = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-		ACLMessage msg = myAgent.blockingReceive(m, 12000);
+		ACLMessage msg = myAgent.blockingReceive(m, myAgent.getWaitDelay());
 
 		var b = processingMessage(msg);
 
