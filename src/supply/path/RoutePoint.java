@@ -44,13 +44,13 @@ public class RoutePoint implements Serializable {
 
 	@Override
 	public String toString() {
-		String format = "{Cargo: %s, Weight: %.2f, Location: (%d,%d) , Delay: %d, time: %d:%s}";
+		String format = "{Cargo: %s, Weight: %.2f, Location: (%d,%d), Destiantion: %s, Delay: %d, time: %d:%s}";
 		
 		int x = lastPoint.x;
 		int y = lastPoint.y;
 		int hours = getHours();
 		String minuts = getMinuts();
-		return String.format(format, ci.Name, ci.Weight, x, y, delay, hours, minuts);
+		return String.format(format, ci.Name, ci.Weight, x, y, ci.Destination, delay, hours, minuts);
 	}
 
 	private String getMinuts() {

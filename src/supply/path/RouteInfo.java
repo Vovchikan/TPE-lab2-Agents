@@ -64,8 +64,10 @@ public class RouteInfo extends AgentInfo {
 	public int hasThisDestinationInRoute(String destination) {
 		int i = 0;
 		for (RoutePoint routePoint : routePoints) {
-			if (routePoint.getCi().Destination == destination)
+			if (routePoint.getCi().Destination == destination) {
+				System.out.print("Проверка для "+routePoint.toString()+" прошла успешно ++++++++++++++++++++++++++++++++");
 				return i;
+			}
 			i++;
 		}
 		return -1;

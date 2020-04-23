@@ -76,7 +76,10 @@ public class DeliveryAgent extends MyAgent {
 
 	public String printRoute() {
 		String format = "\nName: %s, Vehicle weigth: %.2f, Vehicle freeWeight: %.2f, RouteInfo: %s\n";
-		return String.format(format, getLocalName(), vehicle.GetWeight(), vehicle.GetFreeWeight(),
-				routeInfo.toString());
+		if(routeInfo != null)
+			return String.format(format, getLocalName(), vehicle.GetWeight(), vehicle.GetFreeWeight(),
+					routeInfo.toString());
+		else
+			return "I have no route";
 	}
 }
