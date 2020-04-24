@@ -1,7 +1,6 @@
 package supply.path;
 
 import supply.agent.AgentInfo;
-import supply.cargo.CargoInfo;
 
 public class PathInfoForStore extends AgentInfo {
 

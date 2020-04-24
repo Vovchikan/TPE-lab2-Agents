@@ -2,14 +2,10 @@ package supply.path;
 
 import java.awt.Point;
 import java.util.ArrayDeque;
-import java.util.List;
-import java.util.TreeMap;
-
 import jade.lang.acl.ACLMessage;
 import supply.agent.IAgentInfo;
 import supply.agent.MyAgent;
 import supply.cargo.CargoInfo;
-import supply.delivery.DeliveryInfoForPath;
 
 public class PathAgent extends MyAgent {
 	private static int count = 1;

@@ -1,8 +1,6 @@
 package supply.cargo;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 
 import jade.core.behaviours.*;
@@ -27,7 +25,8 @@ public class SendAndWaitBehaviour extends SimpleBehaviour {
 		receiversNames = shuffleArray(receiversNames);
 		for (int i = 0; i < receiversNames.length; i++) {
 			System.out.println(myAgent.getLocalName() + " is trying to find free deliverAgent.");
-			myAgent.SendInfo(receiversNames[i], myAgent.GetInfo());
+			myAgent.SendInfo(receiversNames[i], new CargoInfo(myAgent.getLocalName(), myAgent.GetWeight(), 
+							myAgent.GetDestinationAddress(), 0));
 
 			MessageTemplate m = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			info = ReceiveMessage(m, 12000);
@@ -37,13 +36,16 @@ public class SendAndWaitBehaviour extends SimpleBehaviour {
 				System.out.println(myAgent.getLocalName() + ": " + receiversNames[i] + " will drive me.");
 				break;
 			} else {
-				String reason = info.Reason;
-				System.out.println(myAgent.getLocalName() + ": " + receiversNames[i] + " WON'T DRIVE ME. REASON IS \""
-						+ reason + "\".");
+				String format = "%s: %s WON'T DRIVE ME. REASON IS \"%s\".";
+				System.out.println(String.format(format, myAgent.getLocalName(), receiversNames[i], info.Reason));
 			}
 		}
-		if (info == null || !info.Success)
-			System.out.println("Nikto menya ne vzyal");
+		if (info == null || !info.Success) {
+			System.out.println("Idu na vtoroy krug".toUpperCase());
+			myAgent.blockingReceive(7000);
+			myAgent.IncreaseWaveByOne();
+			myAgent.addBehaviour(new SendAndWaitBehaviour(myAgent));
+		}
 		finished = true;
 	}
 
