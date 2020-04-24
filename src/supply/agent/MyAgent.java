@@ -75,7 +75,7 @@ public abstract class MyAgent extends Agent {
 
 	protected String GetName() {
 		// TODO Auto-generated method stub
-		return this.getClass().getSimpleName() + this.GetNumber();
+		return this.getClass().getSimpleName() + this.GetNumber(); 
 	}
 
 }

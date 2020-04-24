@@ -2,6 +2,7 @@ package supply.path;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import supply.agent.AgentInfo;
 import supply.cargo.CargoInfo;
@@ -11,11 +12,15 @@ public class RouteInfo extends AgentInfo {
 	private ArrayList<RoutePoint> routePoints;
 	private int lastTimeValue; // Конечное время, для прохода всего маршрута
 	private Point lastPoint; // Конец маршрута
+	private int startTimeValue;
 	private String deliveryName;
+	private String vw;
+	private String vfw;
 
-	public RouteInfo() {
+	public RouteInfo(int lastTimeValue) {
 		routePoints = new ArrayList<RoutePoint>();
-		lastTimeValue = 8 * 60 + 30; // 8 hours and 30 minuts
+		this.lastTimeValue = lastTimeValue;
+		this.startTimeValue = lastTimeValue;
 		lastPoint = new Point(0, 0);
 	}
 
@@ -51,8 +56,10 @@ public class RouteInfo extends AgentInfo {
 
 	@Override
 	public String toString() {
+		String shour = Integer.toString(RoutePoint.getHours(startTimeValue));
+		String smins = RoutePoint.getStringMinuts(startTimeValue);
 		// TODO Auto-generated method stub
-		String res = "Nachalo";
+		String res = String.format("\nVehicle weight: %s, Vehicle freeWeight: %s, Start time: %s:%s", vw, vfw, shour, smins);
 		int i = 1;
 		for (RoutePoint routePoint : routePoints) {
 			res += "\n" + i++ + ". ";
@@ -65,7 +72,7 @@ public class RouteInfo extends AgentInfo {
 		int i = 0;
 		for (RoutePoint routePoint : routePoints) {
 			if (routePoint.getCi().Destination == destination) {
-				System.out.print("Проверка для "+routePoint.toString()+" прошла успешно ++++++++++++++++++++++++++++++++");
+				System.out.print("Проверка для "+routePoint.toString()+" прошла успешно"+"++".repeat(10));
 				return i;
 			}
 			i++;
@@ -76,6 +83,21 @@ public class RouteInfo extends AgentInfo {
 	public void addExistDestination(CargoInfo cargoInfo, int index) {
 		routePoints.add(index + 1, new RoutePoint(cargoInfo, 0, routePoints.get(index).getLastPoint(),
 				routePoints.get(index).getLastTimeValue()));
+	}
+	
+	public static int CountRoadTime(Double speed, double roadLength) {
+		int time = (int) Math.ceil(roadLength / speed);
+		return time;
+	}
 
+	public static double CountRoadLength(Point start, Point end) {
+		double length = Math.sqrt(Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2));
+		return length;
+	}
+
+	public void iniWeight(double weight, double fweight) {
+		// TODO Auto-generated method stub
+		vw = String.format(Locale.US, "%.2f", weight);
+		vfw = String.format(Locale.US, "%.2f", fweight);
 	}
 }

@@ -11,15 +11,11 @@ public class CargoInfo extends AgentInfo{
 	public String Name;
 	public int Wave;
 	
-	public CargoInfo(String name, double weight, String destination) {
+	public CargoInfo(String name, double weight, String destination, int Wave) {
 		this.Name = name;
 		this.Weight = weight;
 		this.Destination = destination;
-	}
-
-	public void PrintInConsole() {
-		// Добавить реализацию
-		
+		this.Wave = Wave;
 	}
 
 	public static CargoInfo CreateFromString(String s) {

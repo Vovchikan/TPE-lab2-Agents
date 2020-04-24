@@ -17,7 +17,7 @@ public class WaitStoreBehaviour extends SimpleBehaviour {
 	
 	public WaitStoreBehaviour(PathAgent a, RouteInfo ri, double speed, CargoInfo cargoInfo, String deliveryAgentName) {
 		this(a);
-		this.ri = ri == null ? new RouteInfo() : ri;
+		this.ri = ri;
 		this.speed = speed;
 		this.cargoInfo = cargoInfo;
 		this.deliveryAgentName = deliveryAgentName;

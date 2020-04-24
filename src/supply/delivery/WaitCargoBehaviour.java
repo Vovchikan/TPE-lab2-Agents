@@ -52,16 +52,25 @@ public class WaitCargoBehaviour extends SimpleBehaviour {
 			
 			System.out.println(myAgent.getLocalName() + ": message from " + msg.getSender().getLocalName() + " was received.");
 			
-			if( myAgent.CheckSpaceForCargo(ci) ) {
+			if( !myAgent.CheckSpaceForCargo(ci) ) {
+				behaviour = new UnAcceptedAnswerForCargo(myAgent, ci, "No place for cargo.");
+			}
+			else if( !myAgent.checkRouteWave(ci)) {
+				behaviour = new UnAcceptedAnswerForCargo(myAgent, ci, "Your want in wrong wave!");
+			}
+			else {
 				myAgent.SendInfo(myAgent.GetPathAgentName(), myAgent.GetInfoForPath(ci));
 				behaviour = new WaitPathBehaviour(myAgent, ci);
 			}
-			else
-				behaviour = new UnAcceptedAnswerForCargo(myAgent, ci, "No place for cargo");
 			
 		}
 		else {
-			behaviour = new FinishBehaviour(myAgent);
+			if(myAgent.ifRouteNullOrEmpty())
+				behaviour = new FinishBehaviour(myAgent);
+			else {
+				myAgent.RefreshRoute();
+				behaviour = new WaitCargoBehaviour(myAgent);
+			}
 		}
 		return behaviour;
 	}

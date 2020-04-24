@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import jade.core.behaviours.SimpleBehaviour;
+import supply.path.RouteInfo;
 
 public class FinishBehaviour extends SimpleBehaviour {
 
@@ -17,11 +18,11 @@ public class FinishBehaviour extends SimpleBehaviour {
 
 	@Override
 	public void action() {
-		// TODO Auto-generated method stub
-		System.out.println(myAgent.printRoute());
+		String r = printRes();
+		System.out.println(r);
 		try(FileWriter writer = new FileWriter(myAgent.getLocalName()+".txt", false))
         {
-            writer.write(myAgent.printRoute());
+            writer.write(r);
             writer.append('\n');
             writer.flush();
         }
@@ -38,4 +39,15 @@ public class FinishBehaviour extends SimpleBehaviour {
 		return finished;
 	}
 
+	private String printRes() {
+		String res = String.format("\nRouteList for delivery: %s\n", myAgent.getLocalName());
+		int i = 0;
+		for (RouteInfo ri : myAgent.getRouteList()) {
+			res += "Route number - "+Integer.toString(i++);
+			res += myAgent.printRoute(ri);
+			res += "\n"+"-".repeat(20);
+		}
+		
+		return res;
+	}
 }

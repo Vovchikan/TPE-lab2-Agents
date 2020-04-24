@@ -6,4 +6,5 @@ public interface IVehicle {
 	double GetSpeed();
 	void SetType(Object arg);
 	void PutCargo(Double cargoWeight);
+	void refresh();
 }

@@ -51,4 +51,10 @@ public class Vehicle implements IVehicle, Serializable {
 	public void PutCargo(Double cargoWeight) {
 		freeWeight -= Math.ceil(cargoWeight);
 	}
+
+	@Override
+	public void refresh() {
+		// TODO Auto-generated method stub
+		freeWeight = weight;
+	}
 }

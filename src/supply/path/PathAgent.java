@@ -47,16 +47,6 @@ public class PathAgent extends MyAgent {
 		return null;
 	}
 
-	private int CountRoadTime(Double speed, double roadLength) {
-		int time = (int) Math.ceil(roadLength / speed);
-		return time;
-	}
-
-	private double CountRoadLength(Point start, Point end) {
-		double length = Math.sqrt(Math.pow(start.x - end.x, 2) + Math.pow(start.y - end.y, 2));
-		return length;
-	}
-
 	public int ConvertTimeToMinuts(int hours, int minut) {
 		return hours * 60 + minut;
 	}
@@ -69,7 +59,8 @@ public class PathAgent extends MyAgent {
 			return true;
 		} else {
 
-			int time = ri.getLastTimeValue() + CountRoadTime(speed, CountRoadLength(ri.getLastPoint(), end));
+			int time = ri.getLastTimeValue() + RouteInfo.CountRoadTime(speed, 
+					RouteInfo.CountRoadLength(ri.getLastPoint(), end));
 			int delay = check(time, mintime, maxtime);
 			if (delay >= 0) {
 				ri.add(cargoInfo, delay, end, time + delay);
