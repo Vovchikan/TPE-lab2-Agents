@@ -103,7 +103,7 @@ public class DeliveryAgent extends MyAgent {
 	}
 
 	public boolean checkRouteWave(CargoInfo ci) {
-		if(routeInfo != null)
+		if(routeInfo != null && routeInfo.getRoutePoints().size() > 0)
 			return routeInfo.getRoutePoints().get(0).getCi().Wave == ci.Wave;
 		return true;	}
 

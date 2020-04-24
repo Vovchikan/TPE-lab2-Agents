@@ -45,7 +45,7 @@ public class FinishBehaviour extends SimpleBehaviour {
 		for (RouteInfo ri : myAgent.getRouteList()) {
 			res += "Route number - "+Integer.toString(i++);
 			res += myAgent.printRoute(ri);
-			res += "\n"+"-".repeat(20);
+			res += "\n"+"-".repeat(20)+"\n";
 		}
 		
 		return res;
