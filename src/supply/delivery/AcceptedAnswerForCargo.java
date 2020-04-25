@@ -26,6 +26,7 @@ public class AcceptedAnswerForCargo extends SimpleBehaviour {
 		String format = "%s: %s is taken at my vehicle!";
 		System.out.println(String.format(format, myAgent.getLocalName(), cargoInfo.Name));
 		myAgent.SendInfo(cargoInfo.Name, new DeliveryInfoForCargo(true, null));
+		myAgent.UnaccAnswersInRow=0;
 		myAgent.addBehaviour(new WaitCargoBehaviour(myAgent));
 		
 		finished = true;

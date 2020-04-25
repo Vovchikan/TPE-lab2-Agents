@@ -9,6 +9,7 @@ import supply.cargo.CargoInfo;
 
 public class RouteInfo extends AgentInfo {
 
+	
 	private ArrayList<RoutePoint> routePoints;
 	private int lastTimeValue; // Конечное время, для прохода всего маршрута
 	private Point lastPoint; // Конец маршрута

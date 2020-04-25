@@ -26,7 +26,7 @@ public class SendAndWaitBehaviour extends SimpleBehaviour {
 		for (int i = 0; i < receiversNames.length; i++) {
 			System.out.println(myAgent.getLocalName() + " is trying to find free deliverAgent.");
 			myAgent.SendInfo(receiversNames[i], new CargoInfo(myAgent.getLocalName(), myAgent.GetWeight(), 
-							myAgent.GetDestinationAddress(), 0));
+							myAgent.GetDestinationAddress()));
 
 			MessageTemplate m = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
 			info = ReceiveMessage(m, 12000);
@@ -42,8 +42,7 @@ public class SendAndWaitBehaviour extends SimpleBehaviour {
 		}
 		if (info == null || !info.Success) {
 			System.out.println("Idu na vtoroy krug".toUpperCase());
-			myAgent.blockingReceive(7000);
-			myAgent.IncreaseWaveByOne();
+			myAgent.blockingReceive(300);
 			myAgent.addBehaviour(new SendAndWaitBehaviour(myAgent));
 		}
 		finished = true;
