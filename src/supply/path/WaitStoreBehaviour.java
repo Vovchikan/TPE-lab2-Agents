@@ -55,7 +55,7 @@ public class WaitStoreBehaviour extends SimpleBehaviour {
 				if(res)
 					behaviour = new AnswerForDeliveryBehaviour(myAgent, ri, deliveryAgentName);
 				else
-					behaviour = new AnswerForDeliveryBehaviour(myAgent, null, deliveryAgentName);
+					behaviour = new AnswerForDeliveryBehaviour(myAgent, null, deliveryAgentName, findTimeFail(ri, si.getMaxt()));
 			}
 
 		} else behaviour = new FinishBehaviour(myAgent);
@@ -69,4 +69,8 @@ public class WaitStoreBehaviour extends SimpleBehaviour {
 		return finished;
 	}
 
+	private boolean findTimeFail(RouteInfo ri, int maxTime) {
+		int routeTimeStart = ri.getLastTimeValue();
+		return routeTimeStart > maxTime;
+	}
 }

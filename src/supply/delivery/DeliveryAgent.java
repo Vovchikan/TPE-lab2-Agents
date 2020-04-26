@@ -90,6 +90,11 @@ public class DeliveryAgent extends MyAgent {
 		return waitDelay;
 	}
 
+	public IVehicle getVehicle() {
+		// TODO Auto-generated method stub
+		return vehicle;
+	}
+
 	public void UpdateRoute(RouteInfo newRoat) {
 		routeInfo = newRoat;
 	}
@@ -110,7 +115,7 @@ public class DeliveryAgent extends MyAgent {
 	}
 
 	public boolean RefreshRoute() {
-		if (routeInfo != null) {
+		if (routeInfo != null && routeInfo.getRoutePoints().size() > 0) {
 			routeInfo.iniWeight(vehicle.GetWeight(), vehicle.GetFreeWeight());
 			routeList.add(routeInfo);
 			routeInfo = null;

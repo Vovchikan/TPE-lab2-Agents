@@ -49,7 +49,7 @@ public class WaitPathBehaviour extends SimpleBehaviour {
 					myAgent.AddCargo(ci);
 					behaviour = new AcceptedAnswerForCargo(myAgent, ci);
 				} else
-					behaviour = new UnAcceptedAnswerForCargo(myAgent, ci, "Can't find roat for you ;(");
+					behaviour = new UnAcceptedAnswerForCargo(myAgent, ci, "Can't find roat for you ;(", pathInfoForDelivery.timeFail);
 			}
 
 		} else {
