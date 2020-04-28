@@ -5,6 +5,7 @@ import supply.agent.AgentInfo;
 public class PathInfoForDelivery extends AgentInfo {
 	
 	private RouteInfo ri;
+	public Boolean timeFail;
 
 	public PathInfoForDelivery(RouteInfo ri) {
 		this.ri = ri;

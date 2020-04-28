@@ -18,7 +18,7 @@ public class WaitPathBehaviour extends SimpleBehaviour {
 	@Override
 	public void action() {
 		MessageTemplate m = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-		ACLMessage msg = myAgent.blockingReceive(m, 20000);
+		ACLMessage msg = myAgent.blockingReceive(m, 120000);
 		var b = processingBehaviour(msg);
 		myAgent.addBehaviour(b);
 		

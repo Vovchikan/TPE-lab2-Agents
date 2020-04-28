@@ -12,7 +12,7 @@ import supply.path.RouteInfo;
 
 public class DeliveryAgent extends MyAgent {
 	private static int count = 1;
-	private int waitDelay = 5000;
+	private int waitDelay = 10000;
 
 	@Override
 	protected String[] GetParamsNames() {
@@ -27,7 +27,7 @@ public class DeliveryAgent extends MyAgent {
 	@Override
 	protected void setup() {
 		super.setup();
-		startWorkTime = 8*60+30;
+		startWorkTime = 8 * 60 + 30;
 		addBehaviour(new WaitCargoBehaviour(this));
 	}
 
@@ -36,6 +36,7 @@ public class DeliveryAgent extends MyAgent {
 	private RouteInfo routeInfo;
 	private ArrayList<RouteInfo> routeList;
 	private int startWorkTime; // Начало рабочего дня
+	public int UnaccAnswersInRow;
 
 	@Override
 	protected void FillWithArgs(Object[] args) {
@@ -60,8 +61,10 @@ public class DeliveryAgent extends MyAgent {
 	}
 
 	public IAgentInfo GetInfoForPath(CargoInfo cargoInfo) {
-		if(routeInfo == null)
+		if (routeInfo == null) {
 			routeInfo = new RouteInfo(this.getStartRouteTime());
+
+		}
 		DeliveryInfoForPath info = new DeliveryInfoForPath(vehicle, routeInfo, cargoInfo);
 
 		return info;
@@ -69,12 +72,12 @@ public class DeliveryAgent extends MyAgent {
 
 	private int getStartRouteTime() {
 		int time;
-		if(routeList == null || routeList.size() == 0)
+		if (routeList == null || routeList.size() == 0)
 			time = this.startWorkTime;
 		else {
-			var lr = routeList.get(routeList.size()-1); // Последний составленный маршрут.
-			time = lr.getLastTimeValue() + RouteInfo.CountRoadTime(vehicle.GetSpeed(), 
-							RouteInfo.CountRoadLength( lr.getLastPoint(), new Point(0,0) ));
+			var lr = routeList.get(routeList.size() - 1); // Последний составленный маршрут.
+			time = lr.getLastTimeValue() + RouteInfo.CountRoadTime(vehicle.GetSpeed(),
+					RouteInfo.CountRoadLength(lr.getLastPoint(), new Point(0, 0)));
 		}
 		return time;
 	}
@@ -87,12 +90,17 @@ public class DeliveryAgent extends MyAgent {
 		return waitDelay;
 	}
 
+	public IVehicle getVehicle() {
+		// TODO Auto-generated method stub
+		return vehicle;
+	}
+
 	public void UpdateRoute(RouteInfo newRoat) {
 		routeInfo = newRoat;
 	}
 
 	public String printRoute(RouteInfo routeInfo) {
-		if(routeInfo != null)
+		if (routeInfo != null)
 			return routeInfo.toString();
 		else
 			return "I have no route";
@@ -102,19 +110,21 @@ public class DeliveryAgent extends MyAgent {
 		return routeList;
 	}
 
-	public boolean checkRouteWave(CargoInfo ci) {
-		if(routeInfo != null && routeInfo.getRoutePoints().size() > 0)
-			return routeInfo.getRoutePoints().get(0).getCi().Wave == ci.Wave;
-		return true;	}
-
 	public boolean ifRouteNullOrEmpty() {
 		return routeInfo == null || routeInfo.getRoutePoints().size() == 0;
 	}
 
-	public void RefreshRoute() {
-		routeInfo.iniWeight(vehicle.GetWeight(), vehicle.GetFreeWeight());
-		routeList.add(routeInfo);
-		routeInfo = null;
-		vehicle.refresh();
+	public boolean RefreshRoute() {
+		if (routeInfo != null && routeInfo.getRoutePoints().size() > 0) {
+			routeInfo.iniWeight(vehicle.GetWeight(), vehicle.GetFreeWeight());
+			routeList.add(routeInfo);
+			routeInfo = null;
+			vehicle.refresh();
+			return true;
+		} else {
+			if (vehicle.GetWeight() != vehicle.GetFreeWeight())
+				throw new UnsupportedOperationException();
+		}
+		return false;
 	}
 }

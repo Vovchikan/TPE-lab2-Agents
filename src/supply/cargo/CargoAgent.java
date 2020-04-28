@@ -5,7 +5,7 @@ import supply.agent.MyAgent;
 
 public class CargoAgent extends MyAgent{
 	private static int count = 1;
-	public String[] DeliveriesNames = new String[] {"DeliveryAgent1", "DeliveryAgent3", "DeliveryAgent2"};
+	public String[] DeliveriesNames = new String[] {"DeliveryAgent1", "DeliveryAgent3", "DeliveryAgent2", "DeliveryAgent4"};
 	
 	@Override
 	protected String[] GetParamsNames() {
@@ -21,13 +21,11 @@ public class CargoAgent extends MyAgent{
 	protected void setup() {
 		// TODO Auto-generated method stub
 		super.setup();
-		this.Wave = 0;
 		addBehaviour(new SendAndWaitBehaviour(this));
 	}
 	
 	private String destinationAddress;
 	private double weight;
-	private int Wave;
 	
 	public double GetWeight() {
 		return weight;
@@ -35,10 +33,6 @@ public class CargoAgent extends MyAgent{
 	
 	public String GetDestinationAddress() {
 		return destinationAddress;
-	}
-	
-	public void IncreaseWaveByOne() {
-		Wave++;
 	}
 	
 	@Override
@@ -49,7 +43,7 @@ public class CargoAgent extends MyAgent{
 
 	@Override
 	public IAgentInfo GetInfo() {
-		return new CargoInfo(this.getLocalName(), weight, destinationAddress, Wave);
+		return new CargoInfo(this.getLocalName(), weight, destinationAddress);
 	}
 
 }
