@@ -5,7 +5,7 @@ import supply.agent.MyAgent;
 
 public class CargoAgent extends MyAgent{
 	private static int count = 1;
-	public String[] DeliveriesNames = new String[] {"DeliveryAgent1", "DeliveryAgent3", "DeliveryAgent2"};
+	public String[] DeliveriesNames = new String[] {"DeliveryAgent1", "DeliveryAgent3", "DeliveryAgent2", "DeliveryAgent4"};
 	
 	@Override
 	protected String[] GetParamsNames() {
